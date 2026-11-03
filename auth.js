@@ -29,7 +29,7 @@ export async function loadDraft(onDraft){
 }
 export async function saveDraft(draft){
   if(!auth.user)throw new Error('Sign in before saving');
-  const payload={user_id:auth.user.id,business_name:draft.name||'',structure:draft.structure||'company',category:draft.category||'retail',onboarding:{...draft,submitted:false},updated_at:new Date().toISOString()};
+  const payload={user_id:auth.user.id,business_name:draft.name||'',structure:draft.structure||'company',category:draft.category||'retail',onboarding:{...draft,submitted:!!draft.submitted},updated_at:new Date().toISOString()};
   let query;
   if(auth.draftId)query=client.from('launch_applications').update(payload).eq('id',auth.draftId).eq('user_id',auth.user.id).eq('status','draft').select('id').single();
   else query=client.from('launch_applications').insert(payload).select('id').single();
